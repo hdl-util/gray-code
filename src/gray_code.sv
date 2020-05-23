@@ -1,6 +1,8 @@
 module gray_code #(
-    parameter int WIDTH, // The width of the input you are converting to gray code
-    parameter bit INVERT = 0 // Whether to invert the gray code, so you can degray
+    // The width of the value being converted to/from gray code
+    parameter int WIDTH,
+    // Whether to invert the gray code, so you can get the original decimal value
+    parameter bit INVERT = 0
 ) (
     input logic [WIDTH-1:0] in,
     output logic [WIDTH-1:0] out
