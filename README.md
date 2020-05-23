@@ -8,6 +8,6 @@ I needed an efficient, easy way to generate gray codes for dual clock FIFOs. It'
 
 ## To-do List
 
-* [Balanced gray codes](/issues/1)
+* [ ] [Balanced gray codes](/issues/1)
 
 
