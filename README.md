@@ -1,4 +1,4 @@
-# Gray codes
+# Gray code
 
 [![Build Status](https://travis-ci.com/hdl-util/gray-code.svg?branch=master)](https://travis-ci.com/hdl-util/gray-code)
 
