@@ -11,17 +11,17 @@ module gray_code #(
 logic [WIDTH-1:0] mapping [0:2**WIDTH-1];
 logic [WIDTH-1:0] inverse_mapping [0:2**WIDTH-1];
 
-if (INVERT)
-    assign out = inverse_mapping[in];
-else
-    assign out = mapping[in];
-
 generate
+    if (INVERT)
+        assign out = inverse_mapping[in];
+    else
+        assign out = mapping[in];
+
     genvar i, dimension;
     for (i = 0; i < 2**WIDTH; i++)
     begin: build_mapping
         for (dimension = 0; dimension < WIDTH; dimension++)
-        begin
+        begin: build_mapping_per_dimension
             if (i % 2**(dimension + 2) < 2**(dimension + 1))
                 assign mapping[i][dimension] = i[dimension];
             else
