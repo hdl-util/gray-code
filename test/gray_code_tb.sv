@@ -1,30 +1,23 @@
 module gray_code_tb ();
-    localparam WIDTH = 8;
+    localparam WIDTH = 16;
     logic [WIDTH-1:0] in, out, out_inverted;
     gray_code #(.WIDTH(WIDTH)) gray_code(.in(in), .out(out));
     gray_code #(.WIDTH(WIDTH), .INVERT(1)) gray_code_inverted(.in(out), .out(out_inverted));
     integer i;
+
+    logic [WIDTH-1:0] prev = WIDTH'(0);
     initial
     begin
         #1;
-        for (i = 0; i < 2**WIDTH; i++)
+        for (i = 1; i < 2**WIDTH; i++)
         begin
-            if (i == 0)
-                assert($onehot(gray_code.mapping[i] ^ gray_code.mapping[2**WIDTH - 1])) else $fatal("(%d) %b ^ %b not onehot", i, gray_code.mapping[i], gray_code.mapping[2**WIDTH - 1]);
-            else
-                assert($onehot(gray_code.mapping[i] ^ gray_code.mapping[i - 1])) else $fatal("(%d) %b ^ %b not onehot", i, gray_code.mapping[i], gray_code.mapping[i - 1]);
-
-            if (i == 2**WIDTH - 1)
-                assert($onehot(gray_code.mapping[i] ^ gray_code.mapping[0])) else $fatal("(%d) %b ^ %b not onehot", i, gray_code.mapping[i], gray_code.mapping[0]);
-            else
-                assert($onehot(gray_code.mapping[i] ^ gray_code.mapping[i + 1])) else $fatal("(%d) %b ^ %b not onehot", i, gray_code.mapping[i], gray_code.mapping[i + 1]);
+            in = WIDTH'(i);
+            #1;
+            assert($onehot(out ^ prev)) else $fatal(1, "Not onehot: %b vs %b for %d", out, prev, in);
+            prev = out;
+            #1;
+            assert(in == out_inverted) else $fatal(1, "Input %d does not equal inverted output %d", in, out_inverted);
         end
         $finish;
-        for (i = 0; i < 2**WIDTH; i++)
-        begin
-            in = i;
-            #1;
-            assert(in == out_inverted) else $fatal("f_inverse(f(%d)) != %d", in, out_inverted);
-        end
     end
 endmodule

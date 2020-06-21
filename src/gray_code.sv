@@ -8,40 +8,26 @@ module gray_code #(
     output logic [WIDTH-1:0] out
 );
 
-logic [WIDTH-1:0] mapping [0:2**WIDTH-1];
-logic [WIDTH-1:0] inverse_mapping [0:2**WIDTH-1];
-
+integer i;
 generate
     if (INVERT)
-        assign out = inverse_mapping[in];
-    else
-        assign out = mapping[in];
-
-    genvar i, dimension;
-    for (i = 0; i < 2**WIDTH; i++)
-    begin: build_mapping
-        for (dimension = 0; dimension < WIDTH; dimension++)
-        begin: build_mapping_per_dimension
-            if (i % 2**(dimension + 2) < 2**(dimension + 1))
-                assign mapping[i][dimension] = i[dimension];
-            else
-                assign mapping[i][dimension] = !i[dimension];
-        end
-    end
-
-    integer j;
-    always_comb
     begin
-        for (j = 0; j < 2**WIDTH; j++)
+        always_comb
         begin
-            if (in == mapping[j])
-                inverse_mapping[in] = j;
+            out = WIDTH'(0);
+            for (i = 0; i < WIDTH; i++)
+            begin: bitwise_assign
+                out = out ^ (in >> i);
+            end
         end
     end
-    // for (i = 0; i < 2**WIDTH; i++)
-    // begin: build_inverse_mapping
-    //     assign inverse_mapping[mapping[i]] = WIDTH'(i);
-    // end
+    else
+    begin
+        always_comb
+        begin
+            out = in ^ (in >> 1);
+        end
+    end
 endgenerate
     
 endmodule
